@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as MapRouteImport } from './routes/map'
@@ -20,6 +21,11 @@ import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as AirQualityRouteImport } from './routes/air-quality'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PredictionsRoute = PredictionsRouteImport.update({
   id: '/predictions',
   path: '/predictions',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/map': typeof MapRoute
   '/news': typeof NewsRoute
   '/predictions': typeof PredictionsRoute
+  '/reports': typeof ReportsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/map': typeof MapRoute
   '/news': typeof NewsRoute
   '/predictions': typeof PredictionsRoute
+  '/reports': typeof ReportsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/map': typeof MapRoute
   '/news': typeof NewsRoute
   '/predictions': typeof PredictionsRoute
+  '/reports': typeof ReportsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/map'
     | '/news'
     | '/predictions'
+    | '/reports'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/map'
     | '/news'
     | '/predictions'
+    | '/reports'
   id:
     | '__root__'
     | '/'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
     | '/map'
     | '/news'
     | '/predictions'
+    | '/reports'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -158,10 +170,18 @@ export interface RootRouteChildren {
   MapRoute: typeof MapRoute
   NewsRoute: typeof NewsRoute
   PredictionsRoute: typeof PredictionsRoute
+  ReportsRoute: typeof ReportsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/predictions': {
       id: '/predictions'
       path: '/predictions'
@@ -246,6 +266,7 @@ const rootRouteChildren: RootRouteChildren = {
   MapRoute: MapRoute,
   NewsRoute: NewsRoute,
   PredictionsRoute: PredictionsRoute,
+  ReportsRoute: ReportsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
