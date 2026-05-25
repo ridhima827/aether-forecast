@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PredictionsRouteImport } from './routes/predictions'
+import { Route as NewsRouteImport } from './routes/news'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CarbonRouteImport } from './routes/carbon'
@@ -22,6 +23,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const PredictionsRoute = PredictionsRouteImport.update({
   id: '/predictions',
   path: '/predictions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MapRoute = MapRouteImport.update({
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/carbon': typeof CarbonRoute
   '/dashboard': typeof DashboardRoute
   '/map': typeof MapRoute
+  '/news': typeof NewsRoute
   '/predictions': typeof PredictionsRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/carbon': typeof CarbonRoute
   '/dashboard': typeof DashboardRoute
   '/map': typeof MapRoute
+  '/news': typeof NewsRoute
   '/predictions': typeof PredictionsRoute
 }
 export interface FileRoutesById {
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/carbon': typeof CarbonRoute
   '/dashboard': typeof DashboardRoute
   '/map': typeof MapRoute
+  '/news': typeof NewsRoute
   '/predictions': typeof PredictionsRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/carbon'
     | '/dashboard'
     | '/map'
+    | '/news'
     | '/predictions'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/carbon'
     | '/dashboard'
     | '/map'
+    | '/news'
     | '/predictions'
   id:
     | '__root__'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/carbon'
     | '/dashboard'
     | '/map'
+    | '/news'
     | '/predictions'
   fileRoutesById: FileRoutesById
 }
@@ -144,6 +156,7 @@ export interface RootRouteChildren {
   CarbonRoute: typeof CarbonRoute
   DashboardRoute: typeof DashboardRoute
   MapRoute: typeof MapRoute
+  NewsRoute: typeof NewsRoute
   PredictionsRoute: typeof PredictionsRoute
 }
 
@@ -154,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/predictions'
       fullPath: '/predictions'
       preLoaderRoute: typeof PredictionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/map': {
@@ -224,6 +244,7 @@ const rootRouteChildren: RootRouteChildren = {
   CarbonRoute: CarbonRoute,
   DashboardRoute: DashboardRoute,
   MapRoute: MapRoute,
+  NewsRoute: NewsRoute,
   PredictionsRoute: PredictionsRoute,
 }
 export const routeTree = rootRouteImport
