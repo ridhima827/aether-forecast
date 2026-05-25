@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as AirQualityRouteImport } from './routes/air-quality'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ const MapRoute = MapRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssistantRoute = AssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AlertsRoute = AlertsRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/air-quality': typeof AirQualityRoute
   '/alerts': typeof AlertsRoute
+  '/assistant': typeof AssistantRoute
   '/dashboard': typeof DashboardRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/air-quality': typeof AirQualityRoute
   '/alerts': typeof AlertsRoute
+  '/assistant': typeof AssistantRoute
   '/dashboard': typeof DashboardRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/air-quality': typeof AirQualityRoute
   '/alerts': typeof AlertsRoute
+  '/assistant': typeof AssistantRoute
   '/dashboard': typeof DashboardRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
@@ -78,16 +87,25 @@ export interface FileRouteTypes {
     | '/'
     | '/air-quality'
     | '/alerts'
+    | '/assistant'
     | '/dashboard'
     | '/map'
     | '/predictions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/air-quality' | '/alerts' | '/dashboard' | '/map' | '/predictions'
+  to:
+    | '/'
+    | '/air-quality'
+    | '/alerts'
+    | '/assistant'
+    | '/dashboard'
+    | '/map'
+    | '/predictions'
   id:
     | '__root__'
     | '/'
     | '/air-quality'
     | '/alerts'
+    | '/assistant'
     | '/dashboard'
     | '/map'
     | '/predictions'
@@ -97,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AirQualityRoute: typeof AirQualityRoute
   AlertsRoute: typeof AlertsRoute
+  AssistantRoute: typeof AssistantRoute
   DashboardRoute: typeof DashboardRoute
   MapRoute: typeof MapRoute
   PredictionsRoute: typeof PredictionsRoute
@@ -123,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assistant': {
+      id: '/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof AssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/alerts': {
@@ -153,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AirQualityRoute: AirQualityRoute,
   AlertsRoute: AlertsRoute,
+  AssistantRoute: AssistantRoute,
   DashboardRoute: DashboardRoute,
   MapRoute: MapRoute,
   PredictionsRoute: PredictionsRoute,
