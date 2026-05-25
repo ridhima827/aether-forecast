@@ -1,14 +1,12 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { QueryClient } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
   createRootRouteWithContext,
   useRouter,
-  HeadContent,
-  Scripts,
+  useMatches,
 } from "@tanstack/react-router";
-
-import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
   return (
@@ -31,7 +29,6 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
   const router = useRouter();
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
@@ -39,7 +36,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="text-xl font-semibold">Atmospheric anomaly</h1>
         <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
         <button
-          onClick={() => { router.invalidate(); reset(); }}
+          onClick={() => {
+            router.invalidate();
+            reset();
+          }}
           className="mt-6 rounded-xl bg-aurora px-5 py-2.5 text-sm font-medium text-primary-foreground"
         >
           Retry
@@ -49,54 +49,43 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+function RouteHead() {
+  const matches = useMatches();
+  useEffect(() => {
+    // Walk from deepest match upward to find a head() with a title.
+    for (let i = matches.length - 1; i >= 0; i--) {
+      const m = matches[i] as unknown as {
+        staticData?: unknown;
+        routeId?: string;
+        // TanStack stores route options on the underlying route, but the head fn
+        // is evaluated and exposed on the match meta. We fall back to scanning meta.
+        meta?: Array<{ title?: string; name?: string; content?: string }>;
+      };
+      const meta = m.meta;
+      if (Array.isArray(meta)) {
+        const titleEntry = meta.find((x) => x && typeof x.title === "string");
+        if (titleEntry?.title) {
+          document.title = titleEntry.title;
+          return;
+        }
+      }
+    }
+    document.title = "Aether — AI Climate Intelligence";
+  }, [matches]);
+  return null;
+}
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Aether — AI Climate Intelligence" },
-      { name: "description", content: "Real-time climate predictions, weather forecasting and atmospheric AI insights powered by global weather stations." },
-      { name: "theme-color", content: "#0F172A" },
-      { property: "og:title", content: "Aether — AI Climate Intelligence" },
-      { property: "og:description", content: "A futuristic dashboard for real-time climate predictions and environmental insights." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap",
-      },
-    ],
-  }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
 
-function RootShell({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
-
 function RootComponent() {
-  const { queryClient } = Route.useRouteContext();
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
+      <RouteHead />
       <Outlet />
-    </QueryClientProvider>
+    </>
   );
 }
