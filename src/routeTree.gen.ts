@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as CarbonRouteImport } from './routes/carbon'
 import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AlertsRouteImport } from './routes/alerts'
@@ -31,6 +32,11 @@ const MapRoute = MapRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CarbonRoute = CarbonRouteImport.update({
+  id: '/carbon',
+  path: '/carbon',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AssistantRoute = AssistantRouteImport.update({
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/alerts': typeof AlertsRoute
   '/analytics': typeof AnalyticsRoute
   '/assistant': typeof AssistantRoute
+  '/carbon': typeof CarbonRoute
   '/dashboard': typeof DashboardRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/alerts': typeof AlertsRoute
   '/analytics': typeof AnalyticsRoute
   '/assistant': typeof AssistantRoute
+  '/carbon': typeof CarbonRoute
   '/dashboard': typeof DashboardRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/alerts': typeof AlertsRoute
   '/analytics': typeof AnalyticsRoute
   '/assistant': typeof AssistantRoute
+  '/carbon': typeof CarbonRoute
   '/dashboard': typeof DashboardRoute
   '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/analytics'
     | '/assistant'
+    | '/carbon'
     | '/dashboard'
     | '/map'
     | '/predictions'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/analytics'
     | '/assistant'
+    | '/carbon'
     | '/dashboard'
     | '/map'
     | '/predictions'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/analytics'
     | '/assistant'
+    | '/carbon'
     | '/dashboard'
     | '/map'
     | '/predictions'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   AlertsRoute: typeof AlertsRoute
   AnalyticsRoute: typeof AnalyticsRoute
   AssistantRoute: typeof AssistantRoute
+  CarbonRoute: typeof CarbonRoute
   DashboardRoute: typeof DashboardRoute
   MapRoute: typeof MapRoute
   PredictionsRoute: typeof PredictionsRoute
@@ -155,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/carbon': {
+      id: '/carbon'
+      path: '/carbon'
+      fullPath: '/carbon'
+      preLoaderRoute: typeof CarbonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/assistant': {
@@ -201,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   AlertsRoute: AlertsRoute,
   AnalyticsRoute: AnalyticsRoute,
   AssistantRoute: AssistantRoute,
+  CarbonRoute: CarbonRoute,
   DashboardRoute: DashboardRoute,
   MapRoute: MapRoute,
   PredictionsRoute: PredictionsRoute,
